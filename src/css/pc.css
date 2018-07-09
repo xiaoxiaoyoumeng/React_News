@@ -16,3 +16,6 @@
 .register{
     float: right !important;
 }
+.f_l{
+    float: left !important;
+}

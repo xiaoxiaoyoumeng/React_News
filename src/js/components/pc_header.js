@@ -9,7 +9,7 @@ import { Row, Col, Menu,Icon,
     Input,
 } from 'antd';
 
-import {Link,Router} from 'react-router-dom'
+import {Link,BrowserRouter} from 'react-router-dom'
 
 const TabPane = Tabs.TabPane
 const FormItem = Form.Item
@@ -24,6 +24,12 @@ class PCHeader extends Component {
             userNickName:'',
             userid:0
         };
+    }
+    componentWillMount(){
+        if (localStorage.userid!=''){
+            this.setState({hasLogined:true})
+            this.setState({userNickName:localStorage.userNickName,userid:localStorage.userid})
+        }
     }
     setModalVisible(value){
         this.setState({modalVisible:value})
@@ -43,7 +49,6 @@ class PCHeader extends Component {
             method:'GET',
         };
         var formData = this.props.form.getFieldsValue()
-        console.log(formData);
         fetch('http://newsapi.gugujiankong.com/Handler.ashx?action='+this.state.action
             +'&username='+formData.userName+'&password='+formData.password
             +'&r_userName='+formData.r_userName
@@ -52,6 +57,8 @@ class PCHeader extends Component {
             then(response=>response.json()).
             then(json=>{
                 this.setState({userNickName:json.NickUserName,userid:json.UserId});
+                localStorage.userid=json.UserId;
+                localStorage.userNickName=json.NickUserName;
             })
         if (this.state.action=='login'){
             this.setState({hasLogined:true})
@@ -67,18 +74,27 @@ class PCHeader extends Component {
             this.setState({action:'register'})
         }
     }
+    logout(){
+        localStorage.userid='';
+        localStorage.userNickName='';
+        this.setState({hasLogined:false})
+    }
     render(){
         let {getFieldProps} = this.props.form;
         const userShow = this.state.hasLogined ?
-            (<Menu.Item key="logout" className={'register'}>
-                <Button type='primary' htmlType='button'>{this.state.userNickName}</Button>
-                &nbsp;&nbsp;
-                {/*<Link target='_blank'>*/}
-                    <Button type='dashed' htmlType='button'>个人中心</Button>
-                {/*</Link>*/}
-                &nbsp;&nbsp;
-                <Button type='ghost' htmlType='button'>退出</Button>
-            </Menu.Item>)
+            (<BrowserRouter>
+                <div>
+                    <Menu.Item key="logout" className='register'>
+                        <Button type='primary' htmlType='button'>{this.state.userNickName}</Button>
+                        &nbsp;&nbsp;
+                        <Link to='/' target='_blank'>
+                            <Button type='dashed' htmlType='button'>个人中心</Button>
+                        </Link>
+                        &nbsp;&nbsp;
+                        <Button type='ghost' htmlType='button' onClick={this.logout.bind(this)}>退出</Button>
+                    </Menu.Item>
+                </div>
+            </BrowserRouter>)
             :
             <Menu.Item key="register" className={'register'}>
                 <Icon type="appstore" />注册/登录
@@ -127,7 +143,7 @@ class PCHeader extends Component {
                                onCancel={()=>this.setModalVisible(false)} onOk={()=>this.setModalVisible(false)} cancelText='取消' okText='关闭'>
                             <Tabs type='card' onChange={this.callback.bind(this)}>
                                 <TabPane tab='登录' key='1'>
-                                    <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
+                                    <Form onSubmit={this.handleSubmit.bind(this)}>
                                         <FormItem label='账户'>
                                             <Input placeholder='请输入您的账号' {...getFieldProps('userName')}/>
                                         </FormItem>
@@ -139,7 +155,7 @@ class PCHeader extends Component {
                                 </TabPane>
 
                                 <TabPane tab='注册' key='2'>
-                                    <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
+                                    <Form onSubmit={this.handleSubmit.bind(this)}>
                                         <FormItem label='账户'>
                                             <Input placeholder='请输入您的账号' {...getFieldProps('r_userName')}/>
                                         </FormItem>
