@@ -22,8 +22,8 @@ export default class MobileList extends Component {
         const newsList = news.length?
             news.map((newsItem,index)=>(
                 <section key={index} className='m_article list-item special_section clearfix'>
-                    <BrowserRouter>
-                        <Link to={`details/${newsItem.uniquekey}`}>
+                    {/*<BrowserRouter>*/}
+                        <Link to={`/details/${newsItem.uniquekey}`}>
                             <div className='m_article_img'>
                                 <img src={newsItem.thumbnail_pic_s} alt={newsItem.title}/>
                             </div>
@@ -43,7 +43,7 @@ export default class MobileList extends Component {
                                 </div>
                             </div>
                         </Link>
-                    </BrowserRouter>
+                    {/*</BrowserRouter>*/}
                 </section>
                 )
             )

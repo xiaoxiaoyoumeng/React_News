@@ -22,15 +22,11 @@ export default class PCNewsBlock extends Component {
         const newsList = news.length?
             news.map((newsItem,index)=>(
                 <li key={index}>
-                    <BrowserRouter>
-                        <Link to={`details/${newsItem.uniquekey}`} target='_blank'>
-                            {newsItem.title}
-                        </Link>
-                    </BrowserRouter>
-
+                    <Link to={`/details/${newsItem.uniquekey}`} target='_blank'>
+                        {newsItem.title}
+                    </Link>
                 </li>
                 )
-
             )
             :
             '没有加载到任何新闻'
