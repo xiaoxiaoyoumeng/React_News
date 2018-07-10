@@ -86,11 +86,12 @@ class MobileHeader extends Component {
     render(){
         let {getFieldProps} = this.props.form;
         const userShow = this.state.hasLogined?
-            <BrowserRouter>
-                    <Link to='/'>
-                        <Icon type='inbox' onClick={this.logout.bind(this)}></Icon>
-                    </Link>
-            </BrowserRouter>
+            <div style={{'float':'right'}}>
+                <Icon type='setting' onClick={this.logout.bind(this)}></Icon>
+                <Link to='/usercenter'>
+                    <Icon type='inbox'></Icon>
+                </Link>
+            </div>
             :
             <Icon type='setting' onClick={this.login.bind(this)}></Icon>
         return(

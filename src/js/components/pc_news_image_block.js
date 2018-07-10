@@ -49,9 +49,6 @@ export default class PCNewsImageBlock extends Component {
                             <p style={stylep}>{newsItem.author_name}</p>
                         </div>
                     </Link>
-                    {/*<Switch>*/}
-                        {/*<Route path='/details/:uniquekey' component={PCNewsDetails}></Route>*/}
-                    {/*</Switch>*/}
                 </div>
                 )
 
